@@ -1,70 +1,24 @@
-# Getting Started with Create React App
+# Seb's Memory Card
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+---Devlog---
 
-## Available Scripts
+June 21st, 2022
 
-In the project directory, you can run:
+    Worked on this a bit yesterday, and a tiny bit a few days before that. I think the issue yesterday was that I had taken two melatonin the night before instead of my usual one, causing my brain to short-circuit while attempting to understand react. Today, things are feeling pretty good and running pretty smoothly. Had a bug with cards no shuffling on click, then realized it was because arrays changing their item order does not count as inequality to their previous state, and therefore does not trigger a rerender. Now, I have a functioning score and cards that are pulled from the API. Just a few more things to add before I can start the styling, and I'm real pumped for that. 
 
-### `npm start`
+    Essentially, you are taking cards from this guy's binder for your commander deck. It being commander/singleton, you can't use more than 1 of the same card and therefore the game of memory makes a bit of sense. Although the project being titled "memory card" still seems inaccurate to me. It should be either memory card game or memory game. The goal of the project isn't to create one memory card. 
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+    The more I work with react the less I understand it. I just want to reset an array to empty so that I can repopulate the binder with new cards. However, calling the usestate function to do this does nothing. Now, I boiled down the problem so all I had was a function the increments a state on click and it also does nothing. No idea what's going on.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+    I don't know how, but it got worse. Spent a few hours just boiling down some react code to really simple stuff to see how it works, and I still have no fucking clue what update what when and where. Sometimes updating a value will rerender it correctly in the DOM and not change the read value, sometimes exactly the opposite. I'm really gonna have to just go through like the entire hook section again sadly. Aside from that, the setup does work the way I have it now. Why? No clue.
 
-### `npm test`
+---To-Do---
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+-Generate new cards on current set finish
+-style basic layout
+-drag and drop cards
+-3d transform on cards like in Gwent
+-card backs shown on correct click, and moved to other pile 
+-shuffling animation
+-add static art
+-add particle effects
