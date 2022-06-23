@@ -1,8 +1,57 @@
+:root {
+    --previousTop: 0;
+    --previousLeft: 0;
+    --previousWidth: 0;
+
+    --targetTop: 0;
+    --targetLeft: 0;
+}
+
+body {
+    margin: 0;
+}
+
+#App {
+    background-color: burlywood;
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+    height: 100vh;
+    width: 100vw;
+    align-items: center;
+}
+
 #binder {
-    background-color: teal;
+    box-sizing: border-box;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    height: 90vh;
+    padding: 15px;
+    gap: 15px;
+    position: relative;
 }
+
+#collection {
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    height: 90vh;
+    padding: 15px;
+    gap: 15px;
+}
+
+.Card {
+    background-color: white;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    height: 1fr;
+    overflow: hidden;
+}
+
+
 
 img {
     display: none;
@@ -10,8 +59,78 @@ img {
 
 img.shown {
     display: block;
+    height: 100%;
+    mix-blend-mode: multiply;
+    filter: opacity(1);
 }
 
-#testdiv {
-    background-color: goldenrod;
+#score {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#collection img {
+    /* content:url("images/cardback.png"); */
+    transform: scale(100%, 100%);
+    animation: collectionReveal 1.3s;
+    display: block;
+    filter: opacity(0);
+}
+
+#collection>.Card {
+    background-color: transparent;
+}
+
+
+.cardCopy {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 2;
+    display: block;
+    filter: opacity(1);
+    animation: moveCard 1.3s;
+    pointer-events: none;
+    border-radius: 10px;
+    transform: scale(-100%, 100%);
+    content:url("images/cardback1.gif");
+}
+
+@keyframes moveCard {
+    0% {filter: opacity(1); top: var(--previousTop); left: var(--previousLeft); transform: scale(100%, 100%); content: initial;}
+    50% {content: initial; transform: scale(100%, 100%);
+        filter: opacity(1); top: var(--previousTop); left: calc(var(--previousLeft) - var(--previousWidth) - 10px)}
+    100% {content:url("images/cardback1.gif"); transform: scale(-100%, 100%);
+        filter: opacity(1); top: var(--targetTop); left: var(--targetLeft)}
+
+}
+
+#coverbox {
+    position: absolute;
+    height: 110%;
+    width: 100%;
+    perspective: 1000px;
+    perspective-origin: 50% 50%;
+    transition: all 0.4s -0.3s;
+    transform:translate(0%, -5%);
+    pointer-events: none;
+}
+
+#cover {
+    background-color: rgb(255, 0, 43);
+    height: 100%;
+    width: 100%;
+    transform: scaleX(1) scaleY(0.97) scaleZ(1) rotateY(0deg);
+    transition: all 0.4s -0.3s;
+}
+
+#coverbox.opencoverbox {
+    perspective: 1000px;
+    perspective-origin: 50% 50%;
+    transform: translate(-46%, -5%);
+}
+
+#cover.opencover {
+    transform: scaleX(0.1) scaleY(1) scaleZ(1) rotateY(-10deg);
 }

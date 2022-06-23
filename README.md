@@ -12,9 +12,13 @@ June 21st, 2022
 
     I don't know how, but it got worse. Spent a few hours just boiling down some react code to really simple stuff to see how it works, and I still have no fucking clue what update what when and where. Sometimes updating a value will rerender it correctly in the DOM and not change the read value, sometimes exactly the opposite. I'm really gonna have to just go through like the entire hook section again sadly. Aside from that, the setup does work the way I have it now. Why? No clue.
 
+June 22nd, 2022
+
+    Ok, so it more or less works as expected now. Just need to do some cute animating and stuff. I think that I may have found the issue I was having with usestate, but we'll get to that again when I need to implement something new.
+
 ---To-Do---
 
--Generate new cards on current set finish
+DONE-Generate new cards on current set finish
 -style basic layout
 -drag and drop cards
 -3d transform on cards like in Gwent
@@ -22,3 +26,6 @@ June 21st, 2022
 -shuffling animation
 -add static art
 -add particle effects
+-binder animation
+-Explanation sidebar (What is the player doing?)
+-wrong card animation

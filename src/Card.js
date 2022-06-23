@@ -16,7 +16,19 @@ function Card(props) {
                 src={props.info.imageUrl} 
                 alt='A magic card'
                 onLoad={showImage}
-                onClick={() => props.updateScore(props.info)}
+                onClick={(e) => {
+            
+                    
+                    if (props.shuffleCards !== undefined) {
+                        props.updateScore(props.info, e.target, e.target.getBoundingClientRect());
+                        props.toggleCover();
+                        setTimeout(() => {
+                            props.shuffleCards();
+                        }, 100);
+                        
+                    }
+                    
+                }}
             ></img>
         </div>
     );
