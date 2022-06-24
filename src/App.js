@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import Card from "./Card";
 import uniqid from "uniqid";
+import dustGif from "./images/dust.gif";
+import landingGif from "./images/landing.gif";
+import pierreGif from "./images/pierre.gif";
 
 function App() {
 
@@ -12,12 +15,16 @@ function App() {
     const [lastCard, setLastCard] = useState(null);
     const [lastTarget, setLastTarget] = useState(null);
     const [lastRect, setLastRect] = useState(null);
+    const [clickedCounter, setClickedCounter] = useState(0);
+    const [highScore, setHighScore] = useState(0);
+
 
     const generateCards = () => {
         //Reset card data.
         setLoaded(false);
         setClickedCards([]);
         setChosenCards([]);
+        setClickedCounter(0);
 
         async function getCards() {
             try {
@@ -29,7 +36,7 @@ function App() {
 
                 let response3 = await fetch(`https://api.magicthegathering.io/v1/cards?set=MMA&page=3`);
                 let data3 = await response3.json();
-                
+
                 return [data.cards, data2.cards, data3.cards];
             } catch (err) {
                 alert(err);
@@ -42,15 +49,15 @@ function App() {
             const setCards = response[0].concat(response[1], response[2]);
             let tempCards = [];
             for (let i = 0; i < 9; i++) {
-        
+
                 let randIndex = Math.floor(Math.random() * setCards.length);
-       
+
 
                 //Prevent reusing cards.
                 while (tempCards.includes(setCards[randIndex])) {
                     randIndex = Math.floor(Math.random() * setCards.length);
                 }
-                
+
                 tempCards.push(setCards[randIndex]);
                 setChosenCards(tempCards);
             }
@@ -58,31 +65,40 @@ function App() {
         });
     }
 
-    
+
 
     //Update player score based on previously clicked cards.
     const updateScore = (card, target, cardRect) => {
         if (clickedCards.includes(card)) {
             setScore(0);
-        } else {     
+            launchOcto(cardRect);
+        } else {
             setClickedCards(clickedCards => clickedCards.concat(card));
             setLastCard(card);
             setLastRect(cardRect);
-            setLastTarget(target)
+            setLastTarget(target);
             setScore(score + 1);
-        } 
+        }
     }
+
+    //Update highscore if current score is higher than last highscore.
+    useEffect(() => {
+        if (score > highScore) {
+            setHighScore(score);
+        }
+    }, [score]);
 
     //Generate new cards one all have been clicked once.
     useEffect(() => {
+        setTimeout(() => {
+            if (clickedCards.length >= 9) {
+                alert('Generating new cards');
+    
+                //Generate new set of 9 cards.
+                generateCards();
+            }
+        }, 1500);
 
-        if (clickedCards.length >= 9) {
-            alert('Generating new cards');
-
-            //Generate new set of 9 cards.
-            generateCards();
-            
-        }
     }, [clickedCards]);
 
     //Generate initial cards on load.
@@ -93,7 +109,7 @@ function App() {
     //Shuffle chosen cards into a new order.
     const shuffleCards = () => {
 
-        let currentIndex = chosenCards.length,  randomIndex;
+        let currentIndex = chosenCards.length, randomIndex;
         let tempCards = chosenCards;
 
         // While there remain elements to shuffle.
@@ -116,9 +132,26 @@ function App() {
     }
 
     const moveCard = (card, target) => {
-        console.log('moving');
+        
         const rect = lastRect;
 
+        //Create the animated dust effect.
+        const dust = document.querySelector('.dust');
+        dust.style.filter = 'opacity(0.6)';
+        dust.src = dustGif;
+
+
+
+        dust.style.left = `${rect.left}px`;
+        dust.style.top = `${rect.top}px`;
+
+
+        //Remove the dust after it's done playing.
+        setTimeout(() => {
+            dust.style.filter = 'opacity(0)';
+        }, 400)
+
+        //Create a copy of the last clicked card.
         const cardCopy = document.createElement('img');
         cardCopy.src = target.src;
         cardCopy.classList.add('cardCopy');
@@ -134,35 +167,90 @@ function App() {
         root.style.setProperty('--previousTop', `${rect.top}px`);
         root.style.setProperty('--previousLeft', `${rect.left}px`);
         root.style.setProperty('--previousWidth', `${rect.width}px`);
-        
+
         //Set CSS variables for animations targets based on card
         //location in collection.
-        const index = clickedCards.indexOf(card);
-        const collection = document.getElementById('collection');
-        const colCards = Array.from(collection.children);
 
-        const targetCard = colCards[index].firstChild;
-        
+        const col = document.getElementById('collection');
+        const collection = Array.from(col.children);
+        const targetCard = collection[clickedCounter];
+
         //On target image load, show card and its animation.
-        targetCard.onload = () => {
+        setTimeout(() => {
+            const targetRect = targetCard.getBoundingClientRect()
+
+            root.style.setProperty('--targetTop', `${targetRect.top}px`);
+            root.style.setProperty('--targetLeft', `${targetRect.left}px`);
+
+
+            cardCopy.style.left = `${targetRect.left}px`;
+            cardCopy.style.top = `${targetRect.top}px`;
+
+            const App = document.getElementById('App');
+            App.appendChild(cardCopy);
+
+            setClickedCounter(clickedCounter => clickedCounter + 1);
+        }, 0);
+
+        //Animate landing dust.
+        setTimeout(() => {
+            const targetRect = targetCard.getBoundingClientRect()
+            const landing = document.querySelector('.landing');
+            landing.src = landingGif;
+            landing.style.filter = 'opacity(0.7)';
+
+            //Set animation location to newest clicked card.
+            landing.style.left = `${targetRect.left}px`;
+            landing.style.top = `${targetRect.top}px`;
+
+            //Hide the gif after animation.
             setTimeout(() => {
-                console.log(targetCard, targetCard.getBoundingClientRect().left);
+                landing.style.filter = 'opacity(0)';
+            }, 350);
+        }, 900);
+    }
 
+    //Animate Pierre launching off screen.
+    const launchOcto = (rect) => {
 
-                const targetRect = targetCard.getBoundingClientRect()
+        //Create the octopus and add it to the DOM
+        const pierre = document.createElement('img');
+        pierre.src = pierreGif;
+        pierre.id = 'pierre';
+        const App = document.getElementById('App');
+        App.appendChild(pierre);
 
+        //Choose a random trajectory for Pierre.
+        const angle = Math.floor(Math.random() * 135);
 
-                root.style.setProperty('--targetTop', `${targetRect.top}px`);
-                root.style.setProperty('--targetLeft', `${targetRect.left}px`);
+        //Set the start point for Pierre,
+        pierre.style.left = `${rect.left}px`;
+        pierre.style.top = `${rect.top}px`;
+        pierre.style.transform = `rotate(${angle}deg)`;
 
+        //Set the end point for Pierre, and then delete him.
+        setTimeout(() => {
+            pierre.style.transform = `rotate(${angle}deg) translateY(-3000px)`;
+            setTimeout(() => {
+                pierre.remove();
+            }, 1000)
+        }, 0);
 
-                cardCopy.style.left = `${targetRect.left}px`;
-                cardCopy.style.top = `${targetRect.top}px`;
+        //Create the wrong text element.
+        const wrongText = document.createElement('div');
+        wrongText.classList.add('wrongtext');
+        wrongText.innerText = 'WRONG';
 
-                const App = document.getElementById('App');
-                App.appendChild(cardCopy);
-            }, 0);
-        }
+        //Set the position of the wrong text and append it.
+        wrongText.style.left = `${rect.left}px`;
+        wrongText.style.top = `${rect.top}px`;
+        App.appendChild(wrongText);
+
+        //Remove the wrong text.
+        setTimeout(() => {
+            wrongText.remove();
+        }, 400);
+
     }
 
     useEffect(() => {
@@ -186,24 +274,19 @@ function App() {
     if (loaded) {
         return (
             <div id="App">
-                <div 
-                    id='score'
-                    >Score: {score}
+                <img id='pierre' src={pierreGif} alt='A gif of dust'></img>
+                <img className='dust' src={dustGif} alt='A gif of dust'></img>
+                <img className='landing' src={landingGif} alt='A gif of dust'></img>
+                <div id='header'>
+                    <h1>Seb's Memory Card</h1>
+                    <div id='score'>Score: {score}</div>
+                    <div id='highscore'>Highscore: {highScore}</div>
                 </div>
-                <div id='collection'>
-                    {clickedCards.map((item, index) => {
-                        return <Card
-                            info={clickedCards[index]}
-                            key={uniqid()}
-                            index={index}
-                            updateScore={updateScore}
-                        />
-                    })}
-                </div>
+
                 <div id='binder'>
 
                     {chosenCards.map((item, index) => {
-                        return <Card 
+                        return <Card
                             info={chosenCards[index]}
                             key={uniqid()}
                             index={index}
@@ -213,14 +296,41 @@ function App() {
                         />
                     })}
 
-                </div>      
-                <div id='coverbox' className='opencoverbox'
-                        >
-                        <div id='cover' className='opencover'></div>
+
+
+                    <div id='coverbox' className='opencoverbox'>
+                        <div id='cover' className='opencover'>
+                            <h1>Ultra-Pro</h1>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div id='collection'>
+                    {/* {clickedCards.map((item, index) => {
+                        return <Card
+                            info={clickedCards[index]}
+                            key={uniqid()}
+                            index={index}
+                            updateScore={updateScore}
+                        />
+                    })} */}
+                    <div className='cardShadow'></div>
+                    <div className='cardShadow'></div>
+                    <div className='cardShadow'></div>
+                    <div className='cardShadow'></div>
+                    <div className='cardShadow'></div>
+                    <div className='cardShadow'></div>
+                    <div className='cardShadow'></div>
+                    <div className='cardShadow'></div>
+                    <div className='cardShadow'></div>
                 </div>
 
 
-
+                <button id='resetbtn' onClick={generateCards}>
+                    <div>Generate New Cards</div>
+                    </button>
+                 
             </div>
         );
     } else {

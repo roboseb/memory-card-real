@@ -16,16 +16,24 @@ June 22nd, 2022
 
     Ok, so it more or less works as expected now. Just need to do some cute animating and stuff. I think that I may have found the issue I was having with usestate, but we'll get to that again when I need to implement something new.
 
+June 23rd, 2022
+
+    I think I'm roughly 2.5 days into this project, and despite being held back by learning react, I feel like there's not too much left to add here. I have a functioning game, some cool animations, and it's all built on API calls and react. 
+
 ---To-Do---
 
 DONE-Generate new cards on current set finish
 -style basic layout
--drag and drop cards
--3d transform on cards like in Gwent
--card backs shown on correct click, and moved to other pile 
--shuffling animation
+CANCEL-drag and drop cards
+CANCEL-3d transform on cards like in Gwent
+DONE-card backs shown on correct click, and moved to other pile 
+DONE-shuffling animation
 -add static art
 -add particle effects
--binder animation
+DONE-binder animation
 -Explanation sidebar (What is the player doing?)
 -wrong card animation
+DONE-add restart button
+-better generating cards message
+-Finish styling
+-fix conditional component return

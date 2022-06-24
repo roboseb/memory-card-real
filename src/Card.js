@@ -30,6 +30,7 @@ function Card(props) {
                     
                 }}
             ></img>
+            <div className='cardSlot'></div>
         </div>
     );
 }

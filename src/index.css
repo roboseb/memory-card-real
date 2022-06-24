@@ -5,31 +5,71 @@
 
     --targetTop: 0;
     --targetLeft: 0;
+
+    --cyber-grape: #54457F;
+}
+
+@font-face {
+    font-family: hansip;
+    src: url('fonts/Hansip.ttf');
 }
 
 body {
     margin: 0;
+    font-family: hansip, sans-serif;
 }
 
 #App {
-    background-color: burlywood;
+    box-sizing: border-box;
+    background-color: var(--cyber-grape);
     position: relative;
-    display: flex;
-    justify-content: flex-end;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 0.5fr 2.5fr 0.5fr;
+    gap: 20px;
     height: 100vh;
     width: 100vw;
+    overflow: hidden;
+    padding: 20px;
+}
+
+#header {
+    grid-column: span 2;
+    display: flex;
+    justify-content: space-evenly;
     align-items: center;
 }
+
+#score {
+
+}
+
 
 #binder {
     box-sizing: border-box;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
-    height: 90vh;
     padding: 15px;
     gap: 15px;
+    height: 100%;
+    max-height: 100%;
     position: relative;
+    background-color: rgb(0, 0, 0);
+    max-width: 480px;
+    box-shadow: -10px 10px black;
+}
+
+.cardSlot {
+    background: linear-gradient(60deg, rgba(167, 167, 167, 0.2) 70%, rgba(255, 255, 255, 0.5) 100%);
+    width: 103%;
+    height: 103%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    border: 2px dashed rgb(165, 165, 165);
+    pointer-events: none;
 }
 
 #collection {
@@ -37,18 +77,23 @@ body {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
-    height: 90vh;
     padding: 15px;
     gap: 15px;
+    height: 100%;
+    max-height: 100%;
+    background-color: goldenrod;
+    max-width: 533px;
+    box-shadow: -10px 10px black;
 }
 
 .Card {
     background-color: white;
     border-radius: 10px;
-    display: flex;
-    align-items: center;
+
     height: 1fr;
-    overflow: hidden;
+
+    position: relative;
+
 }
 
 
@@ -57,18 +102,31 @@ img {
     display: none;
 }
 
-img.shown {
-    display: block;
-    height: 100%;
-    mix-blend-mode: multiply;
-    filter: opacity(1);
+img:not(#binder *):not(.cardCopy) {
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
 }
 
-#score {
+img.shown {
+    display: block;
+    max-height: 100%;
+    mix-blend-mode: multiply;
+    filter: opacity(1) brightness(100%);
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 0.4s;
 }
+
+img.shown:hover {
+    filter: opacity(1) brightness(150%);
+}
+
+
+
+
 
 #collection img {
     /* content:url("images/cardback.png"); */
@@ -78,8 +136,11 @@ img.shown {
     filter: opacity(0);
 }
 
-#collection>.Card {
-    background-color: transparent;
+#collection>.cardShadow {
+    background-color: black;
+    display: block;
+    border-radius: 10px;
+    box-shadow: inset -5px 5px 0px rgb(59, 59, 59);
 }
 
 
@@ -90,7 +151,7 @@ img.shown {
     z-index: 2;
     display: block;
     filter: opacity(1);
-    animation: moveCard 1.3s;
+    animation: moveCard 1s;
     pointer-events: none;
     border-radius: 10px;
     transform: scale(-100%, 100%);
@@ -99,8 +160,8 @@ img.shown {
 
 @keyframes moveCard {
     0% {filter: opacity(1); top: var(--previousTop); left: var(--previousLeft); transform: scale(100%, 100%); content: initial;}
-    50% {content: initial; transform: scale(100%, 100%);
-        filter: opacity(1); top: var(--previousTop); left: calc(var(--previousLeft) - var(--previousWidth) - 10px)}
+    50% {content: initial; transform: scale(140%, 140%);
+        filter: opacity(1); top: var(--previousTop); left: calc(var(--previousLeft) + var(--previousWidth) + 10px)}
     100% {content:url("images/cardback1.gif"); transform: scale(-100%, 100%);
         filter: opacity(1); top: var(--targetTop); left: var(--targetLeft)}
 
@@ -108,6 +169,8 @@ img.shown {
 
 #coverbox {
     position: absolute;
+    left: 0;
+    top: 0;
     height: 110%;
     width: 100%;
     perspective: 1000px;
@@ -118,11 +181,16 @@ img.shown {
 }
 
 #cover {
-    background-color: rgb(255, 0, 43);
+    background: rgb(61,61,61);
+    background: linear-gradient(118deg, rgb(41, 41, 41) 20%, rgba(0,0,0,1) 100%);
     height: 100%;
     width: 100%;
     transform: scaleX(1) scaleY(0.97) scaleZ(1) rotateY(0deg);
     transition: all 0.4s -0.3s;
+    border-radius: 0px 30px 30px 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #coverbox.opencoverbox {
@@ -133,4 +201,102 @@ img.shown {
 
 #cover.opencover {
     transform: scaleX(0.1) scaleY(1) scaleZ(1) rotateY(-10deg);
+}
+
+#cover>h1 {
+    color: white;
+}
+
+
+#resetbtn {
+    grid-column: span 2;
+    background-color: goldenrod;
+    background-image: url('images/pierre.gif');
+    background-size: 5px;
+    background-position: center;
+
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+
+    box-sizing: border-box;
+    border: 5px solid transparent;
+    transition: all 0.4s;
+    width: 100%;
+    justify-self: center;
+    font-family: hansip, sans-serif;
+    font-size: 4rem;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+#resetbtn:hover {
+    border: 5px solid black;
+    border-radius: 20px;
+    width: 50%;
+    background-size: 500px;
+    color: white;
+    font-size: 2rem;
+}
+
+#resetbtn:active {
+    filter: brightness(0.5);
+}
+
+#resetbtn>div {
+    pointer-events: none;
+    margin-top: 10px;
+}
+
+.dust {
+    width: 150px;
+    height: 150px;
+    position: absolute;
+    z-index: 3;
+    display: block;
+    filter: opacity(0);
+    transform: translateX(70%);
+    pointer-events: none;
+}
+
+.landing {
+    position: absolute;
+    width: 250px;
+    height: 250px;
+    display: block;
+    transform: translate(-25%, -15%);
+    filter: opacity(0);
+}
+
+#pierre {
+    height: 15%;
+    position: absolute;
+    display: block;
+    z-index: 2;
+    pointer-events: none;
+    transition: all 2s;
+}
+
+.wrongtext {
+    position: absolute;
+    transform: translate(-20%, 10%);
+    background-color: white;
+    color: red;
+    padding: 20px 10px 10px 10px;
+    font-size: 4rem;
+    border-radius: 15px;
+    pointer-events: none;
+    animation: wrongani 0.15s infinite;
+}
+
+@keyframes wrongani {
+    0% {transform: rotate(0deg) translate(-20%, 10%) scale(100%)} 
+    33% {transform: rotate(20deg) translate(-20%, 10%) scale(80%)}
+    66% {transform: rotate(0deg) translate(-20%, 10%) scale(100%)}
+    100% {transform: rotate(-20deg) translate(-20%, 10%) scale(110%)}
+    100% {transform: rotate(0deg) translate(-20%, 10%) scale(100%)}
+
 }
