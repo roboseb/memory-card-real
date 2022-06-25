@@ -25,6 +25,26 @@ function App() {
         setClickedCards([]);
         setChosenCards([]);
         setClickedCounter(0);
+        setScore(0);
+
+        //Animate the cover to hide cards loading.
+        toggleCover(1100);
+
+        //Remove card copies from DOM.
+        if (Array.from(document.querySelectorAll('.cardCopy')).length !== 0) {
+            const cardCopies = Array.from(document.querySelectorAll('.cardCopy'));
+            cardCopies.forEach(card => {
+                
+                card.classList.add('killedcard');
+
+                setTimeout(() => {
+                    card.remove();
+                }, 500);
+            });
+        }
+
+
+
 
         async function getCards() {
             try {
@@ -39,7 +59,7 @@ function App() {
 
                 return [data.cards, data2.cards, data3.cards];
             } catch (err) {
-                alert(err);
+                console.log(err);
             }
         }
 
@@ -92,14 +112,36 @@ function App() {
     useEffect(() => {
         setTimeout(() => {
             if (clickedCards.length >= 9) {
-                alert('Generating new cards');
-    
+                showMessage();
+                
                 //Generate new set of 9 cards.
                 generateCards();
             }
         }, 1500);
 
     }, [clickedCards]);
+
+    //Show a message congratulating the player and telling them
+    //that it will generate new cards.
+    const showMessage = () => {
+        const message = document.createElement('div');
+        message.id = 'winmessage';
+        message.innerText = 'Congrats, new cards for you!';
+
+        const App = document.getElementById('App');
+        App.appendChild(message);
+
+        setTimeout(() => {
+            message.remove();
+        }, 500);
+
+        const newRect = {left: window.innerWidth/2,
+                        top: window.innerHeight/2};
+
+        for (let i = 0; i < 360; i += 30) {
+            launchOcto(newRect, i);
+        }
+    }
 
     //Generate initial cards on load.
     useEffect(() => {
@@ -186,8 +228,8 @@ function App() {
             cardCopy.style.left = `${targetRect.left}px`;
             cardCopy.style.top = `${targetRect.top}px`;
 
-            const App = document.getElementById('App');
-            App.appendChild(cardCopy);
+            const rootEl = document.getElementById('root');
+            rootEl.appendChild(cardCopy);
 
             setClickedCounter(clickedCounter => clickedCounter + 1);
         }, 0);
@@ -211,7 +253,7 @@ function App() {
     }
 
     //Animate Pierre launching off screen.
-    const launchOcto = (rect) => {
+    const launchOcto = (rect, newAngle) => {
 
         //Create the octopus and add it to the DOM
         const pierre = document.createElement('img');
@@ -221,7 +263,12 @@ function App() {
         App.appendChild(pierre);
 
         //Choose a random trajectory for Pierre.
-        const angle = Math.floor(Math.random() * 135);
+        let angle = Math.floor(Math.random() * 180);
+
+        //Use a custom angle if passed.
+        if (newAngle !== undefined) {
+            angle = newAngle;
+        }
 
         //Set the start point for Pierre,
         pierre.style.left = `${rect.left}px`;
@@ -258,7 +305,7 @@ function App() {
         moveCard(lastCard, lastTarget);
     }, [lastTarget]);
 
-    const toggleCover = () => {
+    const toggleCover = (timer) => {
         const cover = document.getElementById('cover');
         const coverBox = document.getElementById('coverbox');
 
@@ -268,46 +315,133 @@ function App() {
         setTimeout(() => {
             cover.classList.toggle('opencover');
             coverBox.classList.toggle('opencoverbox');
-        }, 400);
+        }, timer);
     }
 
-    if (loaded) {
-        return (
-            <div id="App">
-                <img id='pierre' src={pierreGif} alt='A gif of dust'></img>
-                <img className='dust' src={dustGif} alt='A gif of dust'></img>
-                <img className='landing' src={landingGif} alt='A gif of dust'></img>
-                <div id='header'>
-                    <h1>Seb's Memory Card</h1>
+    //Toggle visibility of the info box.
+    const toggleInfo = () => {
+        const infoBox = document.getElementById('info');
+        infoBox.classList.toggle('infoshown');
+    }
+
+   
+    return (
+        <div id="App">
+            <img id='pierremain' src={pierreGif} alt='A spinning octopus named Pierre'></img>
+            <img className='dust' src={dustGif} alt='A gif of dust'></img>
+            <img className='landing' src={landingGif} alt='A gif of dust'></img>
+
+            <div id='infobtn' onClick={toggleInfo}><div>?</div></div>
+            <div id='info'>
+                "What in the name of Aunt Pierrita is going on?", you might ask.
+                Well friend, it's very simple. Our crimson molluscan pal Pierre here
+                is interested in giving away his Modern Masters collection! However,
+                he will only allow you to use them in building a commander deck.
+                As you can imagine, this means you can only choose each card once.
+                If you happen to choose the same card twice from a page, you get
+                nothing! How cruel is that? Very cruel indeed, for you see, Pierre
+                has had a very tiresome and challenging past. There was a time before
+                the Intersection of Planes when mankind knew not of sapient species outside
+                themselves. Such was a time of relative peace. But men in that time
+                had grown disinterested with women of their species. With so many advancements
+                in technology, money had no meaning, and with that, it came to be that
+                women had also lost their interest in men. One woman, by the most fitting
+                name of Dorothy, had grown particularly fond a blue-ringed octopus named
+                Gerard with which she was performing research. Men had lost their drive 
+                for money, and therefore their drive to exceed in life. But Gerard seemed
+                motivated by something entirely foreign to Dorothy, and she demanded to know
+                what. Over the course of her life, she dedicated herself to finding a method
+                to communicate with Octopi in the common tongues of the land. And she was
+                succesful! A happy ending it was, for Dorothy. She and Gerard were soon married
+                after her discovery. She learned that even those considered lower creatures were
+                capable of grand ideas, and even, as was revealed, love. For the rest
+                of the world, this discovery had incredibly far reaching implications.
+                As you may already know, Octopi are among the most intelligent creatures 
+                of God's design. Perhaps it was intentional, then, that God did not grant
+                this species the ability of human-like speech. Over the next centuries, 
+                man would learn quite a lot about the desires of the molluscans. As with
+                humanity, most were content to simply live day to day, foraging for snails
+                and slugs and playing tricks on researchers with their abilites to camouflage
+                condense to the size of their beaks. However, again as with the humans,
+                there were outliers who had much grander plans. Once they were fully capable
+                of communications, leaders rapidly rose from the ranks below the sea.
+                They immediately demanded an audience with the world leaders of the most 
+                powerful and influential groups of Earth. Among them, some were apprehensive.
+                After all, the outcome of such a conference had never before been seen,
+                and the world leaders were fearful of the potential outcomes. The United 
+                Continent of America and its territory Mexicanada saw a large potential in 
+                using the both the unique mechanical skills and intelligence of the Octopi
+                to bolster the efficacy of their stock market. President Greta Thumberger 
+                didn't waste time mentioning the importance of immediately having as large
+                a population of the new arrivals be taken in as immigrants of her country. 
+                Her motivations for this eluded leaders and economists at the time, and this
+                confusion remains today. Japan commented that it would indeed be comical
+                to witness an Octopus making four pieces of takoyaki simultaneously. 
+                Historians remind us often to learn from the mistakes of our past. Year after
+                year, decade after decade, century after century and millenium after millenium
+                mankind seemed to regularly forget this simple piece of advice. But the
+                molluscans happened to be just a bit different. After all, it only took
+                two tentacles, three at most, to hunt their required nourishment each day.
+                This left them with plenty of time and energy to plot their course of action
+                once they joined man on land and in his cities. They came to their conclusion
+                rather quickly, in fact. In 255 BC they had congregated and decided that 
+                the simplest most effective choice would be to simply assimilate. And so,
+                in the years following the marital joining of Dorothy and Gerard, that is what
+                happened. The Octopi of all seven seas joined humanity on dry land across the
+                entire globe. They had much valuable information to learn from humans, 
+                and in return they shared their own vast wealth of knowledge. Recipes,
+                songs, art, games, sports, tales and histories were all shared willingly
+                and with joy between the two groups. And the same content congregation continued
+                in the same way to the present day, as it is predicted to continue well into
+                the future. That brings us back to our little friend Pierre. Why did his life
+                not reflect the incredible peace and prosperity of the rest of the world?
+                Well, it was rather simple. He had recently played against a land-hate deck
+                in a game of Magic: The Gathering. That was it. That was all. And now it was time
+                to depart with his collection. That's where you came in! Remember the rules?
+                Well, let's go!
+            </div>
+
+
+            <div id='header'>
+                <h1>Seb's Memory Card</h1>
+                <div id='scorebox'>
                     <div id='score'>Score: {score}</div>
                     <div id='highscore'>Highscore: {highScore}</div>
                 </div>
 
-                <div id='binder'>
+            </div>
+            <div id='binder'>
+                {loaded ?
 
-                    {chosenCards.map((item, index) => {
-                        return <Card
-                            info={chosenCards[index]}
-                            key={uniqid()}
-                            index={index}
-                            updateScore={updateScore}
-                            shuffleCards={shuffleCards}
-                            toggleCover={toggleCover}
-                        />
-                    })}
+                    
+                        chosenCards.map((item, index) => {
+                            return <Card
+                                info={chosenCards[index]}
+                                key={uniqid()}
+                                index={index}
+                                updateScore={updateScore}
+                                shuffleCards={shuffleCards}
+                                toggleCover={() => toggleCover(400)}
+                            />
+                        })
+                    
 
 
 
-                    <div id='coverbox' className='opencoverbox'>
-                        <div id='cover' className='opencover'>
-                            <h1>Ultra-Pro</h1>
-                        </div>
+                    :
+                    <div id='loadmessage'>Please wait, loading...</div>
+                }
+                <div id='coverbox' className='opencoverbox'>
+                    <div id='cover' className='opencover'>
+                        <h1>Ultra-Pro</h1>
                     </div>
-
                 </div>
 
-                <div id='collection'>
-                    {/* {clickedCards.map((item, index) => {
+            </div>
+
+
+            <div id='collection'>
+                {/* {clickedCards.map((item, index) => {
                         return <Card
                             info={clickedCards[index]}
                             key={uniqid()}
@@ -315,33 +449,24 @@ function App() {
                             updateScore={updateScore}
                         />
                     })} */}
-                    <div className='cardShadow'></div>
-                    <div className='cardShadow'></div>
-                    <div className='cardShadow'></div>
-                    <div className='cardShadow'></div>
-                    <div className='cardShadow'></div>
-                    <div className='cardShadow'></div>
-                    <div className='cardShadow'></div>
-                    <div className='cardShadow'></div>
-                    <div className='cardShadow'></div>
-                </div>
-
-
-                <button id='resetbtn' onClick={generateCards}>
-                    <div>Generate New Cards</div>
-                    </button>
-                 
+                <div className='cardShadow'></div>
+                <div className='cardShadow'></div>
+                <div className='cardShadow'></div>
+                <div className='cardShadow'></div>
+                <div className='cardShadow'></div>
+                <div className='cardShadow'></div>
+                <div className='cardShadow'></div>
+                <div className='cardShadow'></div>
+                <div className='cardShadow'></div>
             </div>
-        );
-    } else {
-        return (
-            <div id="App">
-                PLEASE WAIT LOADING
-            </div>
-        );
-    }
 
 
+            <button id='resetbtn' onClick={generateCards}>
+                <div>Generate New Cards</div>
+            </button>
+
+        </div>
+    );
 }
 
 export default App;

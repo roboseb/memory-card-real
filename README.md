@@ -1,4 +1,33 @@
 # Seb's Memory Card
+---Features---
+
+-Memory card game
+
+-Click each card on a page only once
+
+-Cards shuffle on each click, whether the card was right or wrong.
+
+-Track your current points as well as high score. 
+
+-Cards pulled from a MtG API
+
+-Responsive desktop layout, no mobile support though
+
+-Pierre the octopus
+
+-Fun colours
+
+-Custom spinning pierre animation used in a few places
+
+-Custom dust and landing animations.
+
+-Card binder is animated when shuffling and generating new cards
+
+-Generate cards button (this resets your current score)
+
+-Lore button
+
+-Many animations minor and major for almost every interaction
 
 ---Devlog---
 
@@ -20,20 +49,27 @@ June 23rd, 2022
 
     I think I'm roughly 2.5 days into this project, and despite being held back by learning react, I feel like there's not too much left to add here. I have a functioning game, some cool animations, and it's all built on API calls and react. 
 
+June 24th, 2022
+
+    Welcome to the final day. Just a couple things left to clean up, but the overall project is looking pretty good. Colour scheme is fun, and I am in love with Pierre the octopus.
+
+    Looks pretty good, might be obvious as usual that I created this first in a half-width window, and then added a media query for wide screen. It changes the layout a bit though, so I think it looks alright. I also wrote a short story hidden behind an info button, lol.
+
 ---To-Do---
 
 DONE-Generate new cards on current set finish
--style basic layout
+DONE-style basic layout
 CANCEL-drag and drop cards
 CANCEL-3d transform on cards like in Gwent
 DONE-card backs shown on correct click, and moved to other pile 
 DONE-shuffling animation
--add static art
--add particle effects
+DONE-add static art
+DONE-add particle effects
 DONE-binder animation
--Explanation sidebar (What is the player doing?)
--wrong card animation
+DONE-Explanation sidebar (What is the player doing?)
+DONE-wrong card animation
 DONE-add restart button
--better generating cards message
--Finish styling
--fix conditional component return
+DONE-better generating cards message
+DONE-Finish styling
+DONE-fix conditional component return
+DONE-wide desktop layout

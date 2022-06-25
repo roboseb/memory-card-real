@@ -19,6 +19,70 @@ body {
     font-family: hansip, sans-serif;
 }
 
+@media only screen and (min-width: 1500px) {
+    #root>#App {
+        padding: 20px 40px;
+        grid-template-columns: 5fr 5fr 2.5fr;
+        grid-template-rows: 1fr 1fr;
+
+        grid-template-areas: 
+            "binder collection header"
+            "binder collection resetbtn"
+    }
+
+    #App>#binder, #App>#collection {
+        max-width: 650px;
+    }
+
+    #App>#binder {
+        grid-area: binder;
+    }
+
+    #App>#collection {
+        grid-area: collection;
+    }
+
+    #App>#header {
+        grid-area: header;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5vh;
+        position: relative;
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    #header>#scorebox {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    #App>#resetbtn {
+        grid-area: resetbtn;
+        position: relative;
+        z-index: 1;
+    }
+
+    #App>#pierremain {
+        left: initial;
+        top: 0;
+        right: -110px;    
+        height: 50vh;
+        filter: opacity(0.5);
+        
+    }
+}
+
+#root {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--cyber-grape);
+}
+
 #App {
     box-sizing: border-box;
     background-color: var(--cyber-grape);
@@ -34,16 +98,45 @@ body {
 }
 
 #header {
+    
     grid-column: span 2;
-    display: flex;
-    justify-content: space-evenly;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-content: center;
     align-items: center;
+    gap: 15vw;
+}
+
+#header>h1 {
+    color: white;
+    justify-self: end;
+    font-size: 2.2rem;
+}
+
+@keyframes excited {
+    0% {transform: translate(-50%, 0%);}
+    50% {transform: translate(-50%, 50%);}
+    100% {transform: translate(-50%, 0%);}
+}
+#scorebox {
+    color: white;
+    justify-self: start;
+    display: flex;
+    align-items: center;
+    gap: 20px;
 }
 
 #score {
-
+    font-size: 2.2rem;
 }
 
+#highscore {
+    font-size: 2.2rem;
+}
+
+#loadmessage {
+    color: white;
+}
 
 #binder {
     box-sizing: border-box;
@@ -56,7 +149,7 @@ body {
     max-height: 100%;
     position: relative;
     background-color: rgb(0, 0, 0);
-    max-width: 480px;
+    max-width: 450px;
     box-shadow: -10px 10px black;
 }
 
@@ -73,6 +166,7 @@ body {
 }
 
 #collection {
+
     box-sizing: border-box;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -82,8 +176,9 @@ body {
     height: 100%;
     max-height: 100%;
     background-color: goldenrod;
-    max-width: 533px;
+    max-width: 450px;
     box-shadow: -10px 10px black;
+    position: relative;
 }
 
 .Card {
@@ -156,6 +251,12 @@ img.shown:hover {
     border-radius: 10px;
     transform: scale(-100%, 100%);
     content:url("images/cardback1.gif");
+    transition: all 0.5s;
+}
+
+.cardCopy.killedcard {
+    transform: rotate(360deg) scale(10%);
+    filter: opacity(10%);
 }
 
 @keyframes moveCard {
@@ -209,6 +310,7 @@ img.shown:hover {
 
 
 #resetbtn {
+
     grid-column: span 2;
     background-color: goldenrod;
     background-image: url('images/pierre.gif');
@@ -221,16 +323,13 @@ img.shown:hover {
 
     box-sizing: border-box;
     border: 5px solid transparent;
-    transition: all 0.4s;
+    transition: all 0.4s, filter 0s;
     width: 100%;
     justify-self: center;
     font-family: hansip, sans-serif;
-    font-size: 4rem;
+    font-size: 3.5rem;
     
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 10px;
+    margin-top: 20px;
 }
 
 #resetbtn:hover {
@@ -248,7 +347,7 @@ img.shown:hover {
 
 #resetbtn>div {
     pointer-events: none;
-    margin-top: 10px;
+    margin-bottom: -20px;
 }
 
 .dust {
@@ -269,15 +368,33 @@ img.shown:hover {
     display: block;
     transform: translate(-25%, -15%);
     filter: opacity(0);
+    z-index: 1;
 }
 
 #pierre {
     height: 15%;
     position: absolute;
     display: block;
-    z-index: 2;
+    z-index: 3;
     pointer-events: none;
     transition: all 2s;
+    left: 50%;
+}
+
+#pierremain {
+    height: 30%;
+    position: absolute;
+    display: block;
+    z-index: 0;
+    transition: all 2s, transform 0.5s;
+    left: 50%;
+    transform: translate(-50%);
+    filter: hue-rotate(0deg);
+}
+
+#pierremain:hover {
+    filter: hue-rotate(-90deg);
+    transform: translate(-50%, 50%);
 }
 
 .wrongtext {
@@ -298,5 +415,73 @@ img.shown:hover {
     66% {transform: rotate(0deg) translate(-20%, 10%) scale(100%)}
     100% {transform: rotate(-20deg) translate(-20%, 10%) scale(110%)}
     100% {transform: rotate(0deg) translate(-20%, 10%) scale(100%)}
+}
 
+#winmessage {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 6rem;
+    background-color: rgba(255, 0, 0, 0.24);
+    backdrop-filter: blur(10px);
+    z-index: 3;
+    padding: 30px 20px 20px 20px;
+    width: 80vw;
+    text-align: center;
+    color: white;
+}
+
+#infobtn {
+    position: absolute;
+    font-size: 2rem;
+    top: 10px; 
+    right: 10px;
+    padding: 10px;
+    background-color: white;
+    border-radius: 100%;
+    width: 0.75rem;
+    height: 0.75rem;
+    filter: opacity(0.3);
+    transition: all 0.4s;
+}
+
+#infobtn:hover {
+    filter: opacity(1);
+    background-color: red;
+    color: white;
+}
+
+#infobtn>div {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -35%);
+}
+
+#info {
+    position: absolute;
+    filter: opacity(0);
+    font-size: 4rem;
+    top: 120%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    background-color: rgba(255, 255, 255, 0.37);
+    transition: all 0.6s;
+    padding: 20px;
+    backdrop-filter: blur(10px);
+    height: 50vh;
+    overflow: scroll;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+#info::-webkit-scrollbar {
+    display: none;
+  }
+
+#info.infoshown {
+    top: 50%;
+    filter: opacity(1);
 }
