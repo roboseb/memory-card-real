@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/memory-card-real/static/css/main.a790b1aa.css",
+    "main.js": "/memory-card-real/static/js/main.c764374f.js",
+    "static/media/Hansip.ttf": "/memory-card-real/static/media/Hansip.645f140b0213d58cb012.ttf",
+    "index.html": "/memory-card-real/index.html",
+    "main.a790b1aa.css.map": "/memory-card-real/static/css/main.a790b1aa.css.map",
+    "main.c764374f.js.map": "/memory-card-real/static/js/main.c764374f.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.a790b1aa.css",
+    "static/js/main.c764374f.js"
+  ]
+}
